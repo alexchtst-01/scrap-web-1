@@ -1,47 +1,49 @@
 from seleniumbase import Driver
 from selenium.webdriver.common.by import By
 import time
-from datetime import datetime
 
-def record_pagination(links):
-    filename = f"links_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-    with open(filename, "a") as f:
-        for link in links:
-            f.write(f"Title: {link.text.strip()} | Links: {link.get_attribute('href')}\n")
+def main():
+    driver = Driver(uc=True)
 
-# Inisialisasi driver dengan mode stealth
-driver = Driver(uc=True)  # Gunakan undetected_chromedriver bawaan SeleniumBase
+    driver.get("https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2014")
+    time.sleep(5)
 
-driver.get("https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2014")  # Ganti dengan URL target
-time.sleep(5)  # Tunggu halaman termuat
+    target_links = driver.find_elements(By.XPATH, "//a[contains(@href, '/eproc4/') and contains(@href, '/pengumumanlelang')]")
 
-while True:
-    try:
-        # Cari tombol Next menggunakan SeleniumBase
-        next_button = driver.find_element(By.CSS_SELECTOR, "a.page-link[aria-label='Next']")
+    for link in target_links:
+        main_window = driver.current_window_handle
         
-        # target_links = driver.find_elements(By.CSS_SELECTOR, "a[href*='/eproc4/*/pengumumanlelang']")
+        href = link.get_attribute("href")
         
-        target_links = driver.find_elements(By.XPATH, "//a[contains(@href, '/eproc4/') and contains(@href, '/pengumumanlelang')]")
+        driver.execute_script("window.open(arguments[0]);", href)
         
-        record_pagination(target_links)
+        time.sleep(2)
         
-        break
+        driver.switch_to.window(driver.window_handles[-1])
+        
+        time.sleep(3)
 
-        # Jika tombol memiliki atribut disabled atau tidak bisa diklik, hentikan loop
-        if "disabled" in next_button.get_attribute("class") or not next_button.is_displayed():
-            print("Pagination selesai.")
-            break
-        
-        # Simulasi interaksi manusia (scroll dan klik)
-        driver.execute_script("arguments[0].scrollIntoView();", next_button)
-        time.sleep(1)  # Tunggu sejenak agar tampak alami
-        next_button.click()
-        print("Klik tombol Next")
+        print(f"\n=== Data dari Halaman Baru ===")
+        print(f"Title: {driver.title}")
+        print(f"URL: {driver.current_url}\n")
 
-        time.sleep(3)  # Tunggu data baru termuat
-    except Exception as e:
-        print("Tidak ada tombol Next atau terjadi error:", e)
-        break
+        try:
+            table = driver.find_element(By.TAG_NAME, "table")
+            tbody = table.find_element(By.TAG_NAME, "tbody")
+            rows = tbody.find_elements(By.TAG_NAME, "tr")
+            
+            for row in rows:
+                col_names = row.find_elements(By.TAG_NAME, "th")
+                col_values = row.find_elements(By.TAG_NAME, "td")
+                
+                for col_name, col_value in zip(col_names, col_values):
+                    print(f"{col_name.text.strip()}: {col_value.text.strip()}")
+            # break
+        except Exception as e:
+            print("Tidak dapat mengambil isi halaman:", e)
 
-driver.quit()
+        driver.close()
+        driver.switch_to.window(main_window)
+
+    driver.quit()
+    
