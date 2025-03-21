@@ -7,15 +7,6 @@ set -e
 url_targets=(
     "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2014"
     "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2015"
-    "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2016"
-    "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2017"
-    "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2018"
-    "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2019"
-    "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2020"
-    "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2021"
-    "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2022"
-    "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2023"
-    "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2024"
 )
 
 source .venv/Scripts/activate
