@@ -2,6 +2,7 @@ from seleniumbase import Driver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 import time
 import pandas as pd
 import argparse
@@ -17,11 +18,22 @@ def main(url):
 
     # List untuk menyimpan semua data sebagai dictionary
     data_list = []
+    
+    print("=== Mengambil Data dari Halaman Utama ===")
+    select_num = WebDriverWait(driver, 2).until(
+        EC.presence_of_element_located((By.XPATH, "//select[@name='tbllelang_length']"))
+    )
+    
+    dropdown = Select(select_num)
+    
+    dropdown.select_by_value("100")
+    
+    time.sleep(5)
 
     while True:
         try:
             # Tunggu elemen muncul
-            target_links = WebDriverWait(driver, 10).until(
+            target_links = WebDriverWait(driver, 8).until(
                 EC.presence_of_all_elements_located((By.XPATH, "//a[contains(@href, '/eproc4/') and contains(@href, '/pengumumanlelang')]"))
             )
 
@@ -34,7 +46,7 @@ def main(url):
                 time.sleep(2)
 
                 driver.switch_to.window(driver.window_handles[-1])
-                time.sleep(3)
+                time.sleep(2)
 
                 print(f"\n=== Mengambil Data dari Halaman Baru ===")
                 print(f"Title: {driver.title}")
@@ -62,10 +74,10 @@ def main(url):
                         for col_name, col_value in zip(col_names, col_values):
                             data_dict[col_name.text.strip()] = col_value.text.strip()
 
-                    print(data_dict)
+                    # print(data_dict)
                     data_list.append(data_dict)
                     
-                    break
+                    # break
 
                 except Exception as e:
                     print("Tidak dapat mengambil isi halaman:", e)
@@ -86,7 +98,7 @@ def main(url):
                 print("Klik tombol Next")
                 time.sleep(5)
                 
-                break
+                # break
 
             except Exception:
                 print("Pagination selesai.")
