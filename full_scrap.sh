@@ -18,10 +18,6 @@ url_targets=(
     "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2024"
 )
 
-source .venv/Scripts/activate
-
-
-# Loop melalui setiap URL dalam array
 for url in "${url_targets[@]}"; do
     echo "Scraping data from: $url"
     python main.py -url="$url"
