@@ -27,20 +27,21 @@
 
 ## How to Run
 
-### Create `.venv` in Windows
+### Create Virtual Environment
+#### Create `.venv` in Windows
 ```sh
 python -m venv .venv
 ```
 
-### Create `.venv` in Linux
+#### Create `.venv` in Linux
 ```sh
 python3 -m venv .venv
 ```
 
 ### Activate Virtual Environment
-#### Windows:
+#### Windows `(git bash)`:
 ```sh
-.venv\Scripts\activate
+source .venv\Scripts\activate
 ```
 #### Linux/Mac:
 ```sh
@@ -55,7 +56,7 @@ pip install -r requirements.txt
 ### Run the Program
 #### Manual Execution:
 ```sh
-python main.py -url "https://example.com"
+python main.py -url "https://lpse.lkpp.go.id/eproc4/lelang?kategoriId=&tahun=2014"
 ```
 
 #### Running with Shell Script (`full_scrap.sh`):
@@ -88,7 +89,7 @@ done
 echo "All URLs processed!"
 ```
 
-#### Run the Script `[dont need to do this in windows]`
+#### Run the Script 
 ```sh
 chmod +x run.sh
 ./run.sh
